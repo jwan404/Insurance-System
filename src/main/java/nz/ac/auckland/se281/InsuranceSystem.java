@@ -9,37 +9,32 @@ public class InsuranceSystem {
   }
 
   public void printDatabase() {
-    System.out.println("Database has 1 profile:");
-     
-    /*MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "s", ":");
-    System.out.println("Data has " + nProfiles + "profile" + sS + ending);
-    System.out.println(" " + rank + ":" + " " + userName + ", " + age);*/
+    System.out.println("Database has 0 profiles.");
+    //make a reference point 
+    
   }
 
   public void createNewProfile(String userName, String age) {
     int size = userName.length();
     int nProfile = 0;
-    int rank = 0;
 
-    /*if((size < 3 ) || (userName = database.userName) ) {
-      if(userName = database.userName) {
-        System.out.println("Usernames must be unique. No profile was created for " + userName);
+    if (size >= 3) {
+      nProfile++;
+       if (nProfile == 1) {
+        System.out.println("Database has 1 profile: ");
+        System.out.println("New profile created for " + userName + " " + "with age " + age + ".");
+        System.out.println(" " + "1" + ":" + " " + userName + ", " + age);
       }
       else {
-        System.out.println(userName + " " + "is an invalid username, it should be at least 3 characters long. No profile was created.");
+        int rank = 1;
+        System.out.println("Database has 2 profiles: ");
+        System.out.println(" " + rank + ":" + " " + userName + ", " + age);
+        rank++;
+        System.out.println(" " + rank + ":" + " " + userName + ", " + age);
       }
-     }*/
-
-    if(size >= 3 )  {
-      nProfile++;
-      rank++;
-    }
-
-    if (nProfile != 0) {
-      System.out.println("Database has 1 profile: ");
-      System.out.println(" " + rank + ":" + " " + userName + ", " + age);
     }
   }
+      
 
   public void loadProfile(String userName) {
     // TODO: Complete this method.
