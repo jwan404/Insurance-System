@@ -1,50 +1,57 @@
 package nz.ac.auckland.se281;
+import java.util.ArrayList;
+
 import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
-  private int nProfile;
+  private ArrayList<Profile> db = new ArrayList<>();
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
   }
 
   public void printDatabase() {
-    //System.out.println("Database has 1 profile: ");
-    if (nProfile == 0) {
-      Profile p0 = new Profile();
-      p0.zeroProfiles();
+    if (db.size() == 0) {
+      System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("0", "s", "."));
+      return;
     }
-    else if (nProfile == 1) {
-      Profile p1 = new Profile();
-      p1.oneProfile();
-    }
-    else {
-      Profile p2 = new Profile();
-      p2.twoProfiles();
+
+    for (int i = 0; i < db.size(); i++) {
+      if (db.size() == 1) {
+        System.out.println( MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
+        System.out.println(" " + (i+1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());    
+      }
+      else {
+        System.out.println( MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", i), "s", ":"));
+        System.out.println(" " + (i+1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());    
+      }
     }
   }
 
   public void createNewProfile(String userName, String age) {
+    int numAge = Integer.parseInt(age);
     
-    //Profile p1 = new Profile();
-    int size = userName.length();
-    int nProfile = 0;
+    if (userName.length() < 3) {
+        MessageCli.INVALID_USERNAME_TOO_SHORT.getMessage(userName);
+        return;
+    }
+    
+     if (numAge < 0 ) {
+      MessageCli.INVALID_AGE.getMessage(age, userName);
+      return;
+    }
 
-    if (size >= 3) {
-      nProfile++;
-       if (nProfile == 1) {
-        printDatabase();//System.out.println("Database has 1 profile: "); //ref
-        System.out.println("New profile created for " + userName + " " + "with age " + age + ".");
-        System.out.println(" " + "1" + ":" + " " + userName + ", " + age);
-      }
-      else {
-        printDatabase(); //System.out.println("Database has 2 profiles: ");//ref
-        int rank = 1;
-        System.out.println(" " + rank + ":" + " " + userName + ", " + age);
-        rank++;
-        System.out.println(" " + rank + ":" + " " + userName + ", " + age);
+    for (int i = 0; i < db.size(); i++) {
+      if(db.get(i).getName() == userName){
+        // Message
+        return;
       }
     }
+
+    db.add(new Profile(userName, age));
+    System.out.println("New profile created for " + userName + " " + "with age " + age + ".");
+    
+  
   }
       
 
