@@ -14,7 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
   MainTest.Task1.class,
   // MainTest.Task2.class, // Uncomment this line when to start Task 2
   // MainTest.Task3.class, // Uncomment this line when to start Task 3
-  // MainTest.YourTests.class, // Uncomment this line to run your own tests
+  MainTest.YourTests.class, // Uncomment this line to run your own tests
 })
 public class MainTest {
   public static class Task1 extends CliTest {
@@ -364,8 +364,13 @@ public class MainTest {
     @Test
     public void TY_01_your_own_test() throws Exception {
       // Write your own test here, in the same format as the other tests.
-      runCommands(PRINT_DB);
-      assertContains("");
+      runCommands(CREATE_PROFILE, "auDreY", "-2", CREATE_PROFILE, "jenny", "19", PRINT_DB);
+      assertContains(
+          "is an invalid age, please provide a positive whole number only. No profile was created"
+              + " for Audrey.");
+      assertContains("New profile created for Jenny with age 19.");
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jenny, 19");
     }
 
     @Test

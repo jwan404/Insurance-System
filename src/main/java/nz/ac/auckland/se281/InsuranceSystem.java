@@ -20,7 +20,7 @@ public class InsuranceSystem {
 
     if (db.size() == 1) {
       System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
-      System.out.println(" " + (1) + ":" + " " + db.get(1).getName() + ", " + db.get(1).getAge());
+      System.out.println(" " + (1) + ":" + " " + db.get(0).getName() + ", " + db.get(0).getAge());
       return;
     }
 
