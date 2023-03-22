@@ -364,13 +364,11 @@ public class MainTest {
     @Test
     public void TY_01_your_own_test() throws Exception {
       // Write your own test here, in the same format as the other tests.
-      runCommands(CREATE_PROFILE, "auDreY", "-2", CREATE_PROFILE, "jenny", "19", PRINT_DB);
-      assertContains(
-          "is an invalid age, please provide a positive whole number only. No profile was created"
-              + " for Audrey.");
-      assertContains("New profile created for Jenny with age 19.");
+      runCommands(CREATE_PROFILE, "auDreY", "19", CREATE_PROFILE, "audrey", "19", PRINT_DB);
+      assertContains("Usernames must be unique. No profile was created for 'Audrey'.");
+      assertContains("New profile created for Audrey with age 19.");
       assertContains("Database has 1 profile:");
-      assertContains("1: Jenny, 19");
+      assertContains("1: Audrey, 19");
     }
 
     @Test

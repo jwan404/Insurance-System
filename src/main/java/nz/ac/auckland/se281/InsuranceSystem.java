@@ -52,8 +52,8 @@ public class InsuranceSystem {
     }
 
     for (int i = 0; i < db.size(); i++) { // checks if name is unique
-      if (db.get(i).getName() == userName) {
-        System.out.println(MessageCli.INVALID_USERNAME_NOT_UNIQUE);
+      if (userName.equals(db.get(i).getName())) {
+        System.out.println(MessageCli.INVALID_USERNAME_NOT_UNIQUE.getMessage(userName));
         return;
       }
     }
