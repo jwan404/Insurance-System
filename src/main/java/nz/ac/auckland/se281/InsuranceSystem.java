@@ -5,6 +5,7 @@ import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
+  private Profile loadProfile = null;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -66,19 +67,14 @@ public class InsuranceSystem {
     for (int i = 0; i < db.size(); i++) { //works for first test
       if (userName.equals(db.get(i).getName())) {
         System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
+        loadProfile = db.get(i);
       return;
       }
-      else { //this part doesnt work
-        System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
-      }
-    }
-
-    if (db.contains(userName)) { //userName is not a string
-      System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
-    }else{
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
-    }
+   }
+  if (loadProfile == null) {
+      MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
   }
+}
 
   public void unloadProfile() {
     // TODO: Complete this method.
