@@ -3,6 +3,7 @@ package nz.ac.auckland.se281;
 import java.util.ArrayList;
 
 import org.eclipse.jgit.transport.UserAgent;
+import org.yaml.snakeyaml.util.UriEncoder;
 
 import nz.ac.auckland.se281.Main.PolicyType;
 
@@ -111,9 +112,27 @@ public class InsuranceSystem {
   }
 
   public void deleteProfile(String userName) {
-    // TODO: Complete this method.
-  }
+    
+    userName =
+    userName.substring(0, 1).toUpperCase()
+        + userName.substring(1, userName.length()).toLowerCase();
+    boolean profileFound = false;
 
+    if (loadedProfile != null && loadedProfile.getName().equals(userName)) { //loadedProfile is the same as userName
+      MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(userName);
+      return;
+    }
+    for (int i = 0; i < db.size(); i++) { 
+      if(userName.equals(db.get(i).getName())) { // delete profile successfully
+        db.remove(i);
+        profileFound = true;
+        MessageCli.PROFILE_DELETED.printMessage(userName);
+      } 
+    }
+    if (!profileFound){
+      MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
+    }
+ }
   public void createPolicy(PolicyType type, String[] options) {
     // TODO: Complete this method.
   }
