@@ -63,7 +63,21 @@ public class InsuranceSystem {
   }
 
   public void loadProfile(String userName) {
-    // TODO: Complete this method.
+    for (int i = 0; i < db.size(); i++) { //works for first test
+      if (userName.equals(db.get(i).getName())) {
+        System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
+      return;
+      }
+      else { //this part doesnt work
+        System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
+      }
+    }
+
+    if (db.contains(userName)) { //userName is not a string
+      System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
+    }else{
+      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
+    }
   }
 
   public void unloadProfile() {
