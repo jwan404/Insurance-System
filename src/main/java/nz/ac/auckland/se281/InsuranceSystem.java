@@ -1,11 +1,14 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+
+import org.eclipse.jgit.transport.UserAgent;
+
 import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
-  private Profile loadProfile = null;
+  private Profile loadedProfile = null;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -29,11 +32,23 @@ public class InsuranceSystem {
         MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", db.size()), "s", ":"));
 
     for (int i = 0; i < db.size(); i++) {
-
-      System.out.println(
+      if (loadedProfile == null){  
+        System.out.println(
           " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
+          return;
+      } else {
+        db.set(db.indexOf(loadedProfile), loadedProfile);
+          if (i == db.indexOf(loadedProfile)) {
+            System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
+          }
+          else {
+            System.out.println(
+          " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
+          }
+      }
     }
   }
+    
 
   public void createNewProfile(String userName, String age) {
     // Creates the profile while ignoring the case. And checks whether the name is valid.
@@ -59,25 +74,43 @@ public class InsuranceSystem {
       }
     }
 
-    db.add(new Profile(userName, age)); // adds profile to database
+    if (loadedProfile == null) {
+       db.add(new Profile(userName, age)); // adds profile to database
     System.out.println("New profile created for " + userName + " " + "with age " + age + ".");
+    }/* else {
+      MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(loadedProfile);
+    } */
+   
   }
 
   public void loadProfile(String userName) {
+    userName =
+    userName.substring(0, 1).toUpperCase()
+        + userName.substring(1, userName.length()).toLowerCase();
     for (int i = 0; i < db.size(); i++) { //works for first test
       if (userName.equals(db.get(i).getName())) {
         System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
-        loadProfile = db.get(i);
+        loadedProfile = db.get(i);
       return;
       }
    }
-  if (loadProfile == null) {
+  if (loadedProfile == null) {
       MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
   }
 }
 
   public void unloadProfile() {
-    // TODO: Complete this method.
+    for (int i = 0; i < db.size(); i++) {
+      if(loadedProfile == null) {
+        System.out.println(MessageCli.NO_PROFILE_LOADED);
+        return;
+      } else {
+        loadedProfile = null;
+        MessageCli.PROFILE_UNLOADED.printMessage(db.get(db.indexOf(loadedProfile)).getName());
+       
+      }
+    } 
+    
   }
 
   public void deleteProfile(String userName) {
