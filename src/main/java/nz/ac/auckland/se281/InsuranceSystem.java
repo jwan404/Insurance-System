@@ -35,7 +35,6 @@ public class InsuranceSystem {
       if (loadedProfile == null){  
         System.out.println(
           " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
-          return;
       } else {
         db.set(db.indexOf(loadedProfile), loadedProfile);
           if (i == db.indexOf(loadedProfile)) {
@@ -105,12 +104,10 @@ public class InsuranceSystem {
         System.out.println(MessageCli.NO_PROFILE_LOADED);
         return;
       } else {
-        loadedProfile = null;
         MessageCli.PROFILE_UNLOADED.printMessage(db.get(db.indexOf(loadedProfile)).getName());
-       
+        loadedProfile = null;
       }
     } 
-    
   }
 
   public void deleteProfile(String userName) {
