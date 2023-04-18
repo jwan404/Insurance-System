@@ -10,6 +10,7 @@ import nz.ac.auckland.se281.Main.PolicyType;
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
   private Profile loadedProfile = null;
+  private abstract class Policy;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -133,6 +134,7 @@ public class InsuranceSystem {
       MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
     }
  }
+
   public void createPolicy(PolicyType type, String[] options) {
     // TODO: Complete this method.
   }
