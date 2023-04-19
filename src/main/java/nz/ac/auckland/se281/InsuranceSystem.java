@@ -2,6 +2,7 @@ package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
 
+import org.eclipse.jgit.internal.transport.ssh.OpenSshConfigFile.HostEntry;
 import org.eclipse.jgit.transport.UserAgent;
 import org.yaml.snakeyaml.util.UriEncoder;
 
@@ -10,7 +11,6 @@ import nz.ac.auckland.se281.Main.PolicyType;
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
   private Profile loadedProfile = null;
-  private ArrayList<Policy> policyCount = new ArrayList<>();
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -26,31 +26,33 @@ public class InsuranceSystem {
 
     if (db.size() == 1) {
       System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
-      System.out.println(" " + (1) + ":" + " " + db.get(0).getName() + ", " + db.get(0).getAge());
+      System.out.println(" " + (1) + ":" + " " + db.get(0).getName() + ", " + db.get(0).getAge() + ", " + "1" + " " + "policy");
       return;
     }
 
     System.out.println(
         MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", db.size()), "s", ":"));
 
-    for (int i = 0; i < db.size(); i++) {
+    for (int i = 0; i < db.size(); i++) { // prints out the profiles in the database
       if (loadedProfile == null){  
         System.out.println(
-          " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
+          " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
       } else {
-        db.set(db.indexOf(loadedProfile), loadedProfile);
-          if (i == db.indexOf(loadedProfile)) {
-            System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
+        db.set(db.indexOf(loadedProfile), loadedProfile); // if the index the loaded profile is the same as the index of the profile in the database, it will be marked with ***
+          if (i == db.indexOf(loadedProfile) && db.get(i).getPolicies().size() == 1) {
+            System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + "1" + " " + "policy");
           }
-          else {
+          else if (i == db.indexOf(loadedProfile) && db.get(i).getPolicies().size() > 1) {
+            System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
+          } else {
             System.out.println(
-          " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge());
+              " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
           }
       }
     }
+
   }
     
-
   public void createNewProfile(String userName, String age) {
     // Creates the profile while ignoring the case. And checks whether the name is valid.
     userName =
@@ -135,12 +137,27 @@ public class InsuranceSystem {
 
   public void createPolicy(PolicyType type, String[] options) {
 
-    if (loadedProfile == null) {
+    if (loadedProfile == null) { // if no profile is loaded, it will not create a policy
       System.out.println("Need to load a profile in order to create a policy.");
-    } else {
-      
+      return;
     }
-
-
+    
+    if (type == PolicyType.HOME) { // creates a new policy based on the type
+      Home homePolicy = new Home(options[0], options[1], options[2]);
+      loadedProfile.addPolicy(homePolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage("home", loadedProfile.getName());
+    }
+    else if (type == PolicyType.CAR) {
+      Car carPolicy = new Car(options[0], options[1], options[2], options[3]);
+      loadedProfile.addPolicy(carPolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage("car", loadedProfile.getName());
+    }
+    else if (type == PolicyType.LIFE) {
+      Life lifePolicy = new Life(options[0]);
+      loadedProfile.addPolicy(lifePolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
+    } else {
+      return;
+    }
   }
 }

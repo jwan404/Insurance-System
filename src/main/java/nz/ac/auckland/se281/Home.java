@@ -1,42 +1,30 @@
 package nz.ac.auckland.se281;
 
-import java.util.Scanner;
-
 public class Home extends Policy{
-    private int sum;
-    private String address;
-    private boolean rental;
+    protected String address; // home
+    protected boolean rental; //home
 
-    public Home (String sum, String address, String rental) {
-        this.sum = Integer.parseInt(sum);
+    public Home (String sum, String address, String rentalStr) {
+        super(sum);
         this.address = address;
-        this.rental = rental != null;
-    }
-
-    public int getSum() {
-        return sum;
+        this.rental = rentalStr.toLowerCase().startsWith("y");
     }
 
     public String getAddress() {
         return address;
     }
 
-    public Boolean getRental() {
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Rental? (yes/no): ");
-        String n = reader.next();
-        reader.close();
-
-        if(n.equals("yes")) {
-            System.out.println("yes");
-            return true;
-        } else {
-            System.out.println("no");
-            return false;
-        }
-            
+    public boolean getRental() {
+       return rental;       
     }
 
+    public double getBasePremium() {
+        if (rental) {
+            return (double) (sum * 0.02);
+        } else {
+            return (double) (sum * 0.01);
+        }
+    }
 
 }
 // Base premium:

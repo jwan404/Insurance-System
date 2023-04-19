@@ -1,22 +1,17 @@
 package nz.ac.auckland.se281;
 
 public class Car extends Policy {
-    private int sum;
-    private String makeModel;
-    private String licensePlate;
-    private boolean mechBreakdown;
+    protected String makeModel; // car
+    protected String licensePlate; // car
+    protected boolean mechBreakdown; // car
 
-    public Car(String sum, String makeModel, String licensePlate, boolean mechBreakdown) {
-        this.sum = Integer.parseInt(sum);
+    public Car(String sum, String makeModel, String licensePlate, String mechBreakdownStr) {
+        super(sum);
         this.makeModel = makeModel;
-        this.licensePlate = licensePlate;
-        this.mechBreakdown = mechBreakdown;
+        this.licensePlate = makeModel;
+        this.mechBreakdown = mechBreakdownStr.toLowerCase().startsWith("y");
     }
 
-    public int getSum() {
-        return sum;
-    }
-    
     public String getMakeModel() {
         return makeModel;
     }
@@ -25,10 +20,27 @@ public class Car extends Policy {
         return licensePlate;
     }
 
-    public boolean isMechBreakdown() { // fix
+    public boolean getMechBreakdown() {
         return mechBreakdown;
     }
-   
+    
+    public double getBasePremium() { // for car
+        for (int i = 0; i < db.size(); i++) {
+            if (db.get(i).getAge() < 25) {
+                if (mechBreakdown = true) {
+                    return (double) (sum * 0.15) + 80;
+                } else {
+                    return (double) (sum * 0.15);
+                }
+            } else {
+                if (mechBreakdown = true) {
+                    return (double) (sum * 0.1) + 80;
+                } else {
+                    return (double) (sum * 0.1);
+                }
+            }
+        }   
+    }
 }
 // Base premium:
 // if client is under 25 years old = base premium is 15% of sum
