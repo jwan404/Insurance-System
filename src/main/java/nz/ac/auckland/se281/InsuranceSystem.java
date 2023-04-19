@@ -10,7 +10,7 @@ import nz.ac.auckland.se281.Main.PolicyType;
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
   private Profile loadedProfile = null;
-  private abstract class Policy;
+  private ArrayList<Policy> policyCount = new ArrayList<>();
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -78,9 +78,7 @@ public class InsuranceSystem {
     if (loadedProfile == null) {
        db.add(new Profile(userName, age)); // adds profile to database
     System.out.println("New profile created for " + userName + " " + "with age " + age + ".");
-    }/* else {
-      MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(loadedProfile);
-    } */
+    }
    
   }
 
@@ -136,6 +134,13 @@ public class InsuranceSystem {
  }
 
   public void createPolicy(PolicyType type, String[] options) {
-    // TODO: Complete this method.
+
+    if (loadedProfile == null) {
+      System.out.println("Need to load a profile in order to create a policy.");
+    } else {
+      
+    }
+
+
   }
 }

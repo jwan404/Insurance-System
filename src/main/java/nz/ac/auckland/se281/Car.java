@@ -12,8 +12,23 @@ public class Car extends Policy {
         this.licensePlate = licensePlate;
         this.mechBreakdown = mechBreakdown;
     }
+
+    public int getSum() {
+        return sum;
+    }
     
-    
+    public String getMakeModel() {
+        return makeModel;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public boolean isMechBreakdown() { // fix
+        return mechBreakdown;
+    }
+   
 }
 // Base premium:
 // if client is under 25 years old = base premium is 15% of sum
