@@ -1,6 +1,8 @@
 package nz.ac.auckland.se281;
 
 public class Life extends Policy{
+    private int discountPremium;
+
 
     public Life(String sum) {
         super(sum);
@@ -14,6 +16,14 @@ public class Life extends Policy{
             return (int) (sum * (1 + (loadedAge / 100)));
         }
     }
+    public int getDiscountPremium() {
+        return discountPremium;
+    }
+
+    public void setDiscountPremium(int discountPremium) {
+        this.discountPremium = discountPremium;
+    }
+
 }
 // base premium = (1 + age/100) of the sum 
 // eg age:25 so base premium = 1.25% of the sum

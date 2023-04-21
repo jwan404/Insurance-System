@@ -3,6 +3,8 @@ package nz.ac.auckland.se281;
 public class Home extends Policy{
     protected String address; // home
     protected boolean rental; //home
+    private int discountPremium;
+
 
     public Home (String sum, String address, String rentalStr) {
         super(sum);
@@ -24,6 +26,14 @@ public class Home extends Policy{
         } else {
             return (int) (sum * 0.01);
         }
+    }
+
+    public int getDiscountPremium() {
+        return discountPremium;
+    }
+
+    public void setDiscountPremium(int discountPremium) {
+        this.discountPremium = discountPremium;
     }
 
 }

@@ -4,6 +4,8 @@ public class Car extends Policy {
     protected String makeModel; // car
     protected String licensePlate; // car
     protected boolean mechBreakdown; // car
+    private   int discountPremium;
+
 
     public Car(String sum, String makeModel, String licensePlate, String mechBreakdownStr) {
         super(sum);
@@ -40,6 +42,14 @@ public class Car extends Policy {
            }
        }
     }
+    public int getDiscountPremium() {
+        return discountPremium;
+    }
+
+    public void setDiscountPremium(int discountPremium) {
+        this.discountPremium = discountPremium;
+    }
+
 }
 // Base premium:
 // if client is under 25 years old = base premium is 15% of sum

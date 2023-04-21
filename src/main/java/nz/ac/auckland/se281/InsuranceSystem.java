@@ -2,16 +2,11 @@ package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
 
-import org.eclipse.jgit.internal.transport.ssh.OpenSshConfigFile.HostEntry;
-import org.eclipse.jgit.transport.UserAgent;
-import org.yaml.snakeyaml.util.UriEncoder;
-
 import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
   private Profile loadedProfile = null;
-  private int lifePolicyCount;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -57,6 +52,19 @@ public class InsuranceSystem {
       }
     }
 
+   for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
+      PolicyType pType = loadedProfile.getPolicies().get(i).getType();
+      if (pType == PolicyType.HOME) {
+        Home homePolicy = (Home) loadedProfile.getPolicies().get(i);
+        MessageCli.PRINT_DB_HOME_POLICY.printMessage(homePolicy.getAddress(), Integer.toString(homePolicy.getSum()), Integer.toString(homePolicy.getBasePremium()), Integer.toString(homePolicy.getDiscountPremium()));
+      } else if (pType == PolicyType.CAR) {
+        Car carPolicy = (Car) loadedProfile.getPolicies().get(i);
+        MessageCli.PRINT_DB_CAR_POLICY.printMessage(carPolicy.getMakeModel(), Integer.toString(carPolicy.getSum()), Integer.toString(carPolicy.getBasePremium(loadedProfile.getAge())), Integer.toString(carPolicy.getDiscountPremium()));
+      } else if (pType == PolicyType.LIFE) {
+        Life lifePolicy = (Life) loadedProfile.getPolicies().get(i);
+        MessageCli.PRINT_DB_LIFE_POLICY.printMessage(Integer.toString(lifePolicy.getSum()), Integer.toString(lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge())), Integer.toString(lifePolicy.getDiscountPremium()));
+      }
+    }  
   }
     
   public void createNewProfile(String userName, String age) {
@@ -153,7 +161,7 @@ public class InsuranceSystem {
       Home homePolicy = new Home(options[0], options[1], options[2]);
       loadedProfile.addPolicy(homePolicy);
       MessageCli.NEW_POLICY_CREATED.printMessage("home", loadedProfile.getName());
-      
+
       if (loadedProfile.getPolicyCount() == 2) {
         discountedPremium = (int) (homePolicy.getBasePremium() * 0.9);
       }
@@ -163,13 +171,15 @@ public class InsuranceSystem {
       else {
         discountedPremium = homePolicy.getBasePremium();
       }
-      System.out.println("Home Policy " + "(" + options[1] + ", " + "Sum Insured: " + "$" + options[0] + ", " 
-      + "Premium: " + "$" + homePolicy.getBasePremium() + " " + "->" + " " + "$" + discountedPremium + ")");
+      int policySize = loadedProfile.getPolicies().size();
+      ((Home)loadedProfile.getPolicies().get(policySize)).setDiscountPremium(discountedPremium);
+
     }
     else if (type == PolicyType.CAR) {
       Car carPolicy = new Car(options[0], options[1], options[2], options[3]);
       loadedProfile.addPolicy(carPolicy);
       MessageCli.NEW_POLICY_CREATED.printMessage("car", loadedProfile.getName());
+
       if (loadedProfile.getPolicyCount() == 2) {
         discountedPremium = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
       }
@@ -179,9 +189,9 @@ public class InsuranceSystem {
       else {
         discountedPremium = (int) carPolicy.getBasePremium(loadedProfile.getAge());
       }
-      System.out.println("Car Policy " + "(" + options[1] + ", " + "Sum Insured: " + "$" + options[0] + ", " 
-      + "Premium: " + "$" + carPolicy.getBasePremium(loadedProfile.getAge()) + " " + "->" + " " + "$" + discountedPremium + ")");
-    }
+      int policySize = loadedProfile.getPolicies().size();
+      ((Car)loadedProfile.getPolicies().get(policySize)).setDiscountPremium(discountedPremium);
+      }
     else if (type == PolicyType.LIFE) {
       // check arraylist if there is a life policy.
       // if there is, print message saying that the user already has a life policy
@@ -195,11 +205,12 @@ public class InsuranceSystem {
           loadedProfile.addPolicy(lifePolicy);
           MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
           discountedPremium = (int) lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge());
-          System.out.println("Life Policy " + "(" + "Sum Insured: " + "$" + options[0] + ", " 
-          + "Premium: " + "$" + lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge()) + " " + "->" + " " + "$" + discountedPremium + ")");
+          int policySize = loadedProfile.getPolicies().size();
+          ((Life)loadedProfile.getPolicies().get(policySize)).setDiscountPremium(discountedPremium);
           return;
         } 
       }
-    } 
+    }     
+    
   }
 }
