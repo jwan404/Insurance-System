@@ -18,11 +18,11 @@ public class Home extends Policy{
        return rental;       
     }
 
-    public double getBasePremium() {
+    public int getBasePremium() {
         if (rental) {
-            return (double) (sum * 0.02);
+            return (int) (sum * 0.02);
         } else {
-            return (double) (sum * 0.01);
+            return (int) (sum * 0.01);
         }
     }
 

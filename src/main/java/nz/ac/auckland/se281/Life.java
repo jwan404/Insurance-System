@@ -6,19 +6,14 @@ public class Life extends Policy{
         super(sum);
     }
 
-    public double getBasePremium() {
-        for (int i = 0; db.size(); i++) {
-            if ( lifePolicyCount == 1) {
-                MessageCli.ONE_LIFE_POLICY_PER_CLIENT.printMessage(db.getName());
-                return;
-            }
-            if (db.get(i).getAge() < 100) {
-                return (double) (sum * 0.01) + db.get(i).getAge();
-            } else {
-                MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.printMessage(db.getName());
-            }
+    public int getBasePremium(String loadedUsername, int loadedAge) {
+        if (loadedAge > 100) {
+            MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.printMessage(loadedUsername);
+            return 0;
+        } else {
+            return (int) (sum * (1 + (loadedAge / 100)));
+        }
     }
-
 }
 // base premium = (1 + age/100) of the sum 
 // eg age:25 so base premium = 1.25% of the sum

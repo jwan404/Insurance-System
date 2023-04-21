@@ -11,6 +11,7 @@ import nz.ac.auckland.se281.Main.PolicyType;
 public class InsuranceSystem {
   private ArrayList<Profile> db = new ArrayList<>();
   private Profile loadedProfile = null;
+  private int lifePolicyCount;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -39,12 +40,17 @@ public class InsuranceSystem {
           " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
       } else {
         db.set(db.indexOf(loadedProfile), loadedProfile); // if the index the loaded profile is the same as the index of the profile in the database, it will be marked with ***
-          if (i == db.indexOf(loadedProfile) && db.get(i).getPolicies().size() == 1) {
-            System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + "1" + " " + "policy");
+          if (i == db.indexOf(loadedProfile)) {
+            if (db.get(i).getPolicies().size() == 0) {
+              System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + "0" + " " + "policies");
+            } else if (db.get(i).getPolicies().size() == 1) {
+              System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + "1" + " " + "policy");
+            } else {
+              System.out.println(
+                "*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
+            }
           }
-          else if (i == db.indexOf(loadedProfile) && db.get(i).getPolicies().size() > 1) {
-            System.out.println("*** " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
-          } else {
+          else {
             System.out.println(
               " " + (i + 1) + ":" + " " + db.get(i).getName() + ", " + db.get(i).getAge() + ", " + db.get(i).getPolicies().size() + " " + "policies");
           }
@@ -142,22 +148,58 @@ public class InsuranceSystem {
       return;
     }
     
+    int discountedPremium = 0;
     if (type == PolicyType.HOME) { // creates a new policy based on the type
       Home homePolicy = new Home(options[0], options[1], options[2]);
       loadedProfile.addPolicy(homePolicy);
       MessageCli.NEW_POLICY_CREATED.printMessage("home", loadedProfile.getName());
+      
+      if (loadedProfile.getPolicyCount() == 2) {
+        discountedPremium = (int) (homePolicy.getBasePremium() * 0.9);
+      }
+      else if (loadedProfile.getPolicyCount() >= 3) {
+        discountedPremium = (int) (homePolicy.getBasePremium() * 0.8);
+      }
+      else {
+        discountedPremium = homePolicy.getBasePremium();
+      }
+      System.out.println("Home Policy " + "(" + options[1] + ", " + "Sum Insured: " + "$" + options[0] + ", " 
+      + "Premium: " + "$" + homePolicy.getBasePremium() + " " + "->" + " " + "$" + discountedPremium + ")");
     }
     else if (type == PolicyType.CAR) {
       Car carPolicy = new Car(options[0], options[1], options[2], options[3]);
       loadedProfile.addPolicy(carPolicy);
       MessageCli.NEW_POLICY_CREATED.printMessage("car", loadedProfile.getName());
+      if (loadedProfile.getPolicyCount() == 2) {
+        discountedPremium = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
+      }
+      else if (loadedProfile.getPolicyCount() >= 3) {
+        discountedPremium = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.8);
+      }
+      else {
+        discountedPremium = (int) carPolicy.getBasePremium(loadedProfile.getAge());
+      }
+      System.out.println("Car Policy " + "(" + options[1] + ", " + "Sum Insured: " + "$" + options[0] + ", " 
+      + "Premium: " + "$" + carPolicy.getBasePremium(loadedProfile.getAge()) + " " + "->" + " " + "$" + discountedPremium + ")");
     }
     else if (type == PolicyType.LIFE) {
-      Life lifePolicy = new Life(options[0]);
-      loadedProfile.addPolicy(lifePolicy);
-      MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
-    } else {
-      return;
-    }
+      // check arraylist if there is a life policy.
+      // if there is, print message saying that the user already has a life policy
+      // if there isn't, create a new life policy
+
+      for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
+        if (loadedProfile.getPolicies().get(i).getType() == PolicyType.LIFE) {
+          MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(loadedProfile.getName());
+        } else {
+          Life lifePolicy = new Life(options[0]);
+          loadedProfile.addPolicy(lifePolicy);
+          MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
+          discountedPremium = (int) lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge());
+          System.out.println("Life Policy " + "(" + "Sum Insured: " + "$" + options[0] + ", " 
+          + "Premium: " + "$" + lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge()) + " " + "->" + " " + "$" + discountedPremium + ")");
+          return;
+        } 
+      }
+    } 
   }
 }

@@ -24,22 +24,21 @@ public class Car extends Policy {
         return mechBreakdown;
     }
     
-    public double getBasePremium() { // for car
-        for (int i = 0; i < db.size(); i++) {
-            if (db.get(i).getAge() < 25) {
-                if (mechBreakdown = true) {
-                    return (double) (sum * 0.15) + 80;
-                } else {
-                    return (double) (sum * 0.15);
-                }
-            } else {
-                if (mechBreakdown = true) {
-                    return (double) (sum * 0.1) + 80;
-                } else {
-                    return (double) (sum * 0.1);
-                }
-            }
-        }   
+    public int getBasePremium(int loadedAge) { // for car
+
+       if (mechBreakdown == true) {
+           if (loadedAge < 25) {
+               return (int) (sum * 0.15 + 80);
+           } else {
+               return (int) (sum * 0.1 + 80);
+           }
+       } else {
+           if (loadedAge < 25) {
+               return (int) (sum * 0.15);
+           } else {
+               return (int) (sum * 0.1);
+           }
+       }
     }
 }
 // Base premium:

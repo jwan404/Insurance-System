@@ -6,9 +6,15 @@ public class Profile {
     private String userName;
     private int age;
     private ArrayList<Policy> policies = new ArrayList<>();
+    private int PolicyCount;
+
+    public int getPolicyCount() {
+        PolicyCount = policies.size();  
+        return PolicyCount;
+    }
 
     public ArrayList<Policy> getPolicies() {
-        return policies; // print policies
+        return policies;
     }
 
     public Profile(String userName, String age) {
@@ -25,7 +31,7 @@ public class Profile {
     }
 
     public void addPolicy(Policy newPolicy) {
-        policies.add(newPolicy);
+        policies.add(newPolicy); // add policies to new arraylist 
     }
 
 }
