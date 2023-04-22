@@ -51,7 +51,7 @@ public class InsuranceSystem {
           }
       }
     }
-
+  if (loadedProfile != null) {
    for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
       PolicyType pType = loadedProfile.getPolicies().get(i).getType();
       if (pType == PolicyType.HOME) {
@@ -65,6 +65,7 @@ public class InsuranceSystem {
         MessageCli.PRINT_DB_LIFE_POLICY.printMessage(Integer.toString(lifePolicy.getSum()), Integer.toString(lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge())), Integer.toString(lifePolicy.getDiscountPremium()));
       }
     }  
+  }
   }
     
   public void createNewProfile(String userName, String age) {
@@ -172,7 +173,7 @@ public class InsuranceSystem {
         discountedPremium = homePolicy.getBasePremium();
       }
       int policySize = loadedProfile.getPolicies().size();
-      ((Home)loadedProfile.getPolicies().get(policySize)).setDiscountPremium(discountedPremium);
+      ((Home)loadedProfile.getPolicies().get(policySize-1)).setDiscountPremium(discountedPremium);
 
     }
     else if (type == PolicyType.CAR) {
@@ -190,7 +191,7 @@ public class InsuranceSystem {
         discountedPremium = (int) carPolicy.getBasePremium(loadedProfile.getAge());
       }
       int policySize = loadedProfile.getPolicies().size();
-      ((Car)loadedProfile.getPolicies().get(policySize)).setDiscountPremium(discountedPremium);
+      ((Car)loadedProfile.getPolicies().get(policySize-1)).setDiscountPremium(discountedPremium);
       }
     else if (type == PolicyType.LIFE) {
       // check arraylist if there is a life policy.
@@ -206,7 +207,7 @@ public class InsuranceSystem {
           MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
           discountedPremium = (int) lifePolicy.getBasePremium(loadedProfile.getName(), loadedProfile.getAge());
           int policySize = loadedProfile.getPolicies().size();
-          ((Life)loadedProfile.getPolicies().get(policySize)).setDiscountPremium(discountedPremium);
+          ((Life)loadedProfile.getPolicies().get(policySize-1)).setDiscountPremium(discountedPremium);
           return;
         } 
       }
