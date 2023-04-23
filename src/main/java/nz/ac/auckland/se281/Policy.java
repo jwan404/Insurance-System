@@ -13,7 +13,7 @@ public abstract class Policy {
     return sum;
   }
 
-  public PolicyType getType() {
+  public PolicyType getType() { // gets type of policy
     if (this instanceof Home) {
       return PolicyType.HOME;
     } else if (this instanceof Car) {

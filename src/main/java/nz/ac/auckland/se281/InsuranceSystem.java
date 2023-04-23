@@ -12,6 +12,7 @@ public class InsuranceSystem {
   }
   // PRINT_DB_PROFILE_HEADER_LONG(" %s%s: %s, %s, %s polic%s for a total of $%s")
   public void printDatabase() {
+
     if (db.size() == 0) {
       System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("0", "s", "."));
       return;
@@ -32,8 +33,8 @@ public class InsuranceSystem {
       if (loadedProfile != null) {
         System.out.println(totalPremium);
         for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
-          PolicyType pType = loadedProfile.getPolicies().get(i).getType();
-          if (pType == PolicyType.HOME) {
+          PolicyType policyType = loadedProfile.getPolicies().get(i).getType();
+          if (policyType == PolicyType.HOME) {
             Home homePolicy = (Home) loadedProfile.getPolicies().get(i);
             if (loadedProfile.getPolicyCount() == 2) {
               discountedPremium1 = (int) (homePolicy.getBasePremium() * 0.9);
@@ -55,7 +56,7 @@ public class InsuranceSystem {
 
             totalPremium = totalPremium + discountedPremium1;
           }
-          if (pType == PolicyType.CAR) {
+          if (policyType == PolicyType.CAR) {
             Car carPolicy = (Car) loadedProfile.getPolicies().get(i);
             if (loadedProfile.getPolicyCount() == 2) {
               discountedPremium2 = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
@@ -77,7 +78,7 @@ public class InsuranceSystem {
 
             totalPremium = totalPremium + discountedPremium2;
           }
-          if (pType == PolicyType.LIFE) {
+          if (policyType == PolicyType.LIFE) {
             Life lifePolicy = (Life) loadedProfile.getPolicies().get(i);
             if (loadedProfile.getPolicyCount() == 2) {
               discountedPremium3 = (int) (lifePolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
@@ -340,7 +341,7 @@ public class InsuranceSystem {
     }
   }
 
-  public void unloadProfile() {
+  public void unloadProfile() { // unloads profile
     for (int i = 0; i < db.size(); i++) {
       if (loadedProfile == null) {
         System.out.println(MessageCli.NO_PROFILE_LOADED);
