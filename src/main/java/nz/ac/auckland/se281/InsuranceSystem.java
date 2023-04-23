@@ -12,179 +12,285 @@ public class InsuranceSystem {
   }
   // PRINT_DB_PROFILE_HEADER_LONG(" %s%s: %s, %s, %s polic%s for a total of $%s")
   public void printDatabase() {
-
-    // When database is called, checks database for number of profiles and outputs messages
-    // depending on the number of profiles.
-
     if (db.size() == 0) {
       System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("0", "s", "."));
       return;
     }
-    for (int i = 0; i < db.size(); i++) {
-      if (db.size() == 1) {
-        System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
-        System.out.println(
-            " "
-                + (1)
-                + ":"
-                + " "
-                + db.get(0).getName()
-                + ", "
-                + db.get(0).getAge()
-                + ", "
-                + db.get(i).getPolicies().size()
-                + " "
-                + "policies");
-        return;
+    for (int j = 0; j < db.size(); j++) {
+
+      int discountedPremium1 = 0;
+      int discountedPremium2 = 0;
+      int discountedPremium3 = 0;
+      int discountedPremium4 = 0;
+      int discountedPremium5 = 0;
+      int discountedPremium6 = 0;
+      int totalPremium = 0;
+      int total2 = 0;
+
+      // When database is called, checks database for number of profiles and outputs messages
+      // depending on the number of profiles.
+      if (loadedProfile != null) {
+        System.out.println(totalPremium);
+        for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
+          PolicyType pType = loadedProfile.getPolicies().get(i).getType();
+          if (pType == PolicyType.HOME) {
+            Home homePolicy = (Home) loadedProfile.getPolicies().get(i);
+            if (loadedProfile.getPolicyCount() == 2) {
+              discountedPremium1 = (int) (homePolicy.getBasePremium() * 0.9);
+            }
+            if (loadedProfile.getPolicyCount() >= 3) {
+              discountedPremium1 = (int) (homePolicy.getBasePremium() * 0.8);
+            }
+            if (loadedProfile.getPolicyCount() == 1) {
+              discountedPremium1 = homePolicy.getBasePremium();
+            }
+            // int policySize = loadedProfile.getPolicies().size();
+            // ((Home) loadedProfile.getPolicies().get(policySize -
+            // 1)).setDiscountPremium(discountedPremium);
+            MessageCli.PRINT_DB_HOME_POLICY.printMessage(
+                homePolicy.getAddress(),
+                Integer.toString(homePolicy.getSum()),
+                Integer.toString(homePolicy.getBasePremium()),
+                Integer.toString(discountedPremium1));
+
+            totalPremium = totalPremium + discountedPremium1;
+          }
+          if (pType == PolicyType.CAR) {
+            Car carPolicy = (Car) loadedProfile.getPolicies().get(i);
+            if (loadedProfile.getPolicyCount() == 2) {
+              discountedPremium2 = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
+
+            } else if (loadedProfile.getPolicyCount() >= 3) {
+              discountedPremium2 = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.8);
+
+            } else {
+              discountedPremium2 = (int) carPolicy.getBasePremium(loadedProfile.getAge());
+            }
+            // int policySize = loadedProfile.getPolicies().size();
+            // ((Car) loadedProfile.getPolicies().get(policySize - 1))
+            //    .setDiscountPremium(discountedPremium);
+            MessageCli.PRINT_DB_CAR_POLICY.printMessage(
+                carPolicy.getMakeModel(),
+                Integer.toString(carPolicy.getSum()),
+                Integer.toString(carPolicy.getBasePremium(loadedProfile.getAge())),
+                Integer.toString(discountedPremium2));
+
+            totalPremium = totalPremium + discountedPremium2;
+          }
+          if (pType == PolicyType.LIFE) {
+            Life lifePolicy = (Life) loadedProfile.getPolicies().get(i);
+            if (loadedProfile.getPolicyCount() == 2) {
+              discountedPremium3 = (int) (lifePolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
+
+            } else if (loadedProfile.getPolicyCount() >= 3) {
+              discountedPremium3 = (int) (lifePolicy.getBasePremium(loadedProfile.getAge()) * 0.8);
+
+            } else {
+              discountedPremium3 = (int) lifePolicy.getBasePremium(loadedProfile.getAge());
+            }
+
+            // int policySize = loadedProfile.getPolicies().size();
+            // ((Life) loadedProfile.getPolicies().get(policySize - 1))
+            //    .setDiscountPremium(discountedPremium);
+            MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
+                Integer.toString(lifePolicy.getSum()),
+                Integer.toString(lifePolicy.getBasePremium(loadedProfile.getAge())),
+                Integer.toString(discountedPremium3));
+
+            totalPremium = totalPremium + discountedPremium3;
+          }
+        }
       }
-    }
-
-    System.out.println(
-        MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", db.size()), "s", ":"));
-
-    for (int i = 0; i < db.size(); i++) { // prints out the profiles in the database
       if (loadedProfile == null) {
-        System.out.println(
-            " "
-                + (i + 1)
-                + ":"
-                + " "
-                + db.get(i).getName()
-                + ", "
-                + db.get(i).getAge()
-                + ", "
-                + db.get(i).getPolicies().size()
-                + " "
-                + "policies");
+        for (int i = 0; i < db.get(j).getPolicyCount(); i++) {
+          PolicyType pType = db.get(j).getPolicies().get(i).getType();
+          if (pType == PolicyType.HOME) {
+            Home homePolicy = (Home) db.get(j).getPolicies().get(i);
+            if (db.get(j).getPolicyCount() == 2) {
+              discountedPremium4 = (int) (homePolicy.getBasePremium() * 0.9);
+            }
+            if (db.get(j).getPolicyCount() >= 3) {
+              discountedPremium4 = (int) (homePolicy.getBasePremium() * 0.8);
+            }
+            if (db.get(j).getPolicyCount() == 1) {
+              discountedPremium4 = homePolicy.getBasePremium();
+            }
+            MessageCli.PRINT_DB_HOME_POLICY.printMessage(
+                homePolicy.getAddress(),
+                Integer.toString(homePolicy.getSum()),
+                Integer.toString(homePolicy.getBasePremium()),
+                Integer.toString(discountedPremium4));
+            // int policySize = loadedProfile.getPolicies().size();
+            // ((Home) loadedProfile.getPolicies().get(policySize -
+            // 1)).setDiscountPremium(discountedPremium);
+            total2 = total2 + discountedPremium4;
+          }
+          if (pType == PolicyType.CAR) {
+            Car carPolicy = (Car) db.get(j).getPolicies().get(i);
+            if (db.get(j).getPolicyCount() == 2) {
+              discountedPremium5 = (int) (carPolicy.getBasePremium(db.get(j).getAge()) * 0.9);
+
+            } else if (db.get(j).getPolicyCount() >= 3) {
+              discountedPremium5 = (int) (carPolicy.getBasePremium(db.get(j).getAge()) * 0.8);
+
+            } else {
+              discountedPremium5 = (int) carPolicy.getBasePremium(db.get(j).getAge());
+            }
+            MessageCli.PRINT_DB_CAR_POLICY.printMessage(
+                carPolicy.getMakeModel(),
+                Integer.toString(carPolicy.getSum()),
+                Integer.toString(carPolicy.getBasePremium(db.get(j).getAge())),
+                Integer.toString(discountedPremium5));
+            // int policySize = loadedProfile.getPolicies().size();
+            // ((Car) loadedProfile.getPolicies().get(policySize - 1))
+            //    .setDiscountPremium(discountedPremium);
+
+            total2 = total2 + discountedPremium5;
+          }
+          if (pType == PolicyType.LIFE) {
+            Life lifePolicy = (Life) db.get(j).getPolicies().get(i);
+            if (db.get(j).getPolicyCount() == 2) {
+              discountedPremium6 = (int) (lifePolicy.getBasePremium(db.get(j).getAge()) * 0.9);
+
+            } else if (db.get(j).getPolicyCount() >= 3) {
+              discountedPremium6 = (int) (lifePolicy.getBasePremium(db.get(j).getAge()) * 0.8);
+
+            } else {
+              discountedPremium6 = (int) lifePolicy.getBasePremium(db.get(j).getAge());
+            }
+            MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
+                Integer.toString(lifePolicy.getSum()),
+                Integer.toString(lifePolicy.getBasePremium(db.get(j).getAge())),
+                Integer.toString(discountedPremium6));
+
+            // int policySize = loadedProfile.getPolicies().size();
+            // ((Life) loadedProfile.getPolicies().get(policySize - 1))
+            //    .setDiscountPremium(discountedPremium);
+            total2 = total2 + discountedPremium6;
+          }
+        }
+      }
+
+      for (int i = 0; i < db.size(); i++) {
+        if (db.size() == 1) {
+          System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
+          System.out.println(
+              " "
+                  + (1)
+                  + ":"
+                  + " "
+                  + db.get(0).getName()
+                  + ", "
+                  + db.get(0).getAge()
+                  + ", "
+                  + db.get(i).getPolicies().size()
+                  + " "
+                  + "policies for a total of $"
+                  + total2);
+          return;
+        }
+      }
+
+      System.out.println(
+          MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", db.size()), "s", ":"));
+
+      // for (int i = 0; i < db.size(); i++) { // prints out the profiles in the database
+      if (loadedProfile == null) {
+        if (db.get(j).getPolicyCount() == 1) {
+          System.out.println(
+              " "
+                  + (j + 1)
+                  + ":"
+                  + " "
+                  + db.get(j).getName()
+                  + ", "
+                  + db.get(j).getAge()
+                  + ", "
+                  + "1"
+                  + " "
+                  + "policy for a total of $"
+                  + total2);
+        } else {
+          System.out.println(
+              " "
+                  + (j + 1)
+                  + ":"
+                  + " "
+                  + db.get(j).getName()
+                  + ", "
+                  + db.get(j).getAge()
+                  + ", "
+                  + db.get(j).getPolicies().size()
+                  + " "
+                  + "policies for a total of $"
+                  + total2);
+        }
+
       } else {
         db.set(
             db.indexOf(loadedProfile),
             loadedProfile); // if the index the loaded profile is the same as the index of the
         // profile in the database, it will be marked with ***
-        if (i == db.indexOf(loadedProfile)) {
-          if (db.get(i).getPolicies().size() == 0) {
+        if (j == db.indexOf(loadedProfile)) {
+          if (db.get(j).getPolicies().size() == 0) {
             System.out.println(
                 "*** "
-                    + (i + 1)
+                    + (j + 1)
                     + ":"
                     + " "
-                    + db.get(i).getName()
+                    + db.get(j).getName()
                     + ", "
-                    + db.get(i).getAge()
+                    + db.get(j).getAge()
                     + ", "
                     + "0"
                     + " "
-                    + "policies");
-          } else if (db.get(i).getPolicies().size() == 1) {
+                    + "policies for a total of $0");
+          } else if (db.get(j).getPolicies().size() == 1) {
             System.out.println(
                 "*** "
-                    + (i + 1)
+                    + (j + 1)
                     + ":"
                     + " "
-                    + db.get(i).getName()
+                    + db.get(j).getName()
                     + ", "
-                    + db.get(i).getAge()
+                    + db.get(j).getAge()
                     + ", "
                     + "1"
                     + " "
-                    + "policy");
+                    + "policy for a total of $"
+                    + totalPremium);
           } else {
             System.out.println(
                 "*** "
-                    + (i + 1)
+                    + (j + 1)
                     + ":"
                     + " "
-                    + db.get(i).getName()
+                    + db.get(j).getName()
                     + ", "
-                    + db.get(i).getAge()
+                    + db.get(j).getAge()
                     + ", "
-                    + db.get(i).getPolicies().size()
+                    + db.get(j).getPolicies().size()
                     + " "
-                    + "policies");
+                    + "policies for a total of $"
+                    + totalPremium);
           }
         } else {
           System.out.println(
               " "
-                  + (i + 1)
+                  + (j + 1)
                   + ":"
                   + " "
-                  + db.get(i).getName()
+                  + db.get(j).getName()
                   + ", "
-                  + db.get(i).getAge()
+                  + db.get(j).getAge()
                   + ", "
-                  + db.get(i).getPolicies().size()
+                  + db.get(j).getPolicies().size()
                   + " "
-                  + "policies");
+                  + "policies for a total of $"
+                  + total2);
         }
       }
-    }
-
-    if (loadedProfile != null) {
-      int discountedPremium = 0;
-
-      for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
-        PolicyType pType = loadedProfile.getPolicies().get(i).getType();
-        if (pType == PolicyType.HOME) {
-          Home homePolicy = (Home) loadedProfile.getPolicies().get(i);
-          if (loadedProfile.getPolicyCount() == 2) {
-            discountedPremium = (int) (homePolicy.getBasePremium() * 0.9);
-          }
-          if (loadedProfile.getPolicyCount() >= 3) {
-            discountedPremium = (int) (homePolicy.getBasePremium() * 0.8);
-          }
-          if (loadedProfile.getPolicyCount() == 1) {
-            discountedPremium = homePolicy.getBasePremium();
-          }
-          // int policySize = loadedProfile.getPolicies().size();
-          // ((Home) loadedProfile.getPolicies().get(policySize -
-          // 1)).setDiscountPremium(discountedPremium);
-          MessageCli.PRINT_DB_HOME_POLICY.printMessage(
-              homePolicy.getAddress(),
-              Integer.toString(homePolicy.getSum()),
-              Integer.toString(homePolicy.getBasePremium()),
-              Integer.toString(discountedPremium));
-        }
-        if (pType == PolicyType.CAR) {
-          Car carPolicy = (Car) loadedProfile.getPolicies().get(i);
-          if (loadedProfile.getPolicyCount() == 2) {
-            discountedPremium = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
-
-          } else if (loadedProfile.getPolicyCount() >= 3) {
-            discountedPremium = (int) (carPolicy.getBasePremium(loadedProfile.getAge()) * 0.8);
-
-          } else {
-            discountedPremium = (int) carPolicy.getBasePremium(loadedProfile.getAge());
-          }
-          // int policySize = loadedProfile.getPolicies().size();
-          // ((Car) loadedProfile.getPolicies().get(policySize - 1))
-          //    .setDiscountPremium(discountedPremium);
-          MessageCli.PRINT_DB_CAR_POLICY.printMessage(
-              carPolicy.getMakeModel(),
-              Integer.toString(carPolicy.getSum()),
-              Integer.toString(carPolicy.getBasePremium(loadedProfile.getAge())),
-              Integer.toString(discountedPremium));
-        }
-        if (pType == PolicyType.LIFE) {
-          Life lifePolicy = (Life) loadedProfile.getPolicies().get(i);
-          if (loadedProfile.getPolicyCount() == 2) {
-            discountedPremium = (int) (lifePolicy.getBasePremium(loadedProfile.getAge()) * 0.9);
-
-          } else if (loadedProfile.getPolicyCount() >= 3) {
-            discountedPremium = (int) (lifePolicy.getBasePremium(loadedProfile.getAge()) * 0.8);
-
-          } else {
-            discountedPremium = (int) lifePolicy.getBasePremium(loadedProfile.getAge());
-          }
-
-          // int policySize = loadedProfile.getPolicies().size();
-          // ((Life) loadedProfile.getPolicies().get(policySize - 1))
-          //    .setDiscountPremium(discountedPremium);
-          MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
-              Integer.toString(lifePolicy.getSum()),
-              Integer.toString(lifePolicy.getBasePremium(loadedProfile.getAge())),
-              Integer.toString(discountedPremium));
-        }
-      }
+      // }
     }
   }
 
