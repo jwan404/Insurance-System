@@ -1,55 +1,45 @@
 package nz.ac.auckland.se281;
 
 public class Car extends Policy {
-    protected String makeModel; // car
-    protected String licensePlate; // car
-    protected boolean mechBreakdown; // car
-    private   int discountPremium;
+  protected String makeModel; // car
+  protected String licensePlate; // car
+  protected boolean mechBreakdown; // car
 
+  public Car(String sum, String makeModel, String licensePlate, String mechBreakdownStr) {
+    super(sum);
+    this.makeModel = makeModel;
+    this.licensePlate = makeModel;
+    this.mechBreakdown = mechBreakdownStr.toLowerCase().startsWith("y");
+  }
 
-    public Car(String sum, String makeModel, String licensePlate, String mechBreakdownStr) {
-        super(sum);
-        this.makeModel = makeModel;
-        this.licensePlate = makeModel;
-        this.mechBreakdown = mechBreakdownStr.toLowerCase().startsWith("y");
+  public String getMakeModel() {
+    return makeModel;
+  }
+
+  public String getLicensePlate() {
+    return licensePlate;
+  }
+
+  public boolean getMechBreakdown() {
+    return mechBreakdown;
+  }
+
+  public int getBasePremium(int loadedAge) { // for car
+
+    if (mechBreakdown == true) {
+      if (loadedAge < 25) {
+        return (int) (sum * 0.15 + 80);
+      } else {
+        return (int) (sum * 0.1 + 80);
+      }
+    } else {
+      if (loadedAge < 25) {
+        return (int) (sum * 0.15);
+      } else {
+        return (int) (sum * 0.1);
+      }
     }
-
-    public String getMakeModel() {
-        return makeModel;
-    }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public boolean getMechBreakdown() {
-        return mechBreakdown;
-    }
-    
-    public int getBasePremium(int loadedAge) { // for car
-
-       if (mechBreakdown == true) {
-           if (loadedAge < 25) {
-               return (int) (sum * 0.15 + 80);
-           } else {
-               return (int) (sum * 0.1 + 80);
-           }
-       } else {
-           if (loadedAge < 25) {
-               return (int) (sum * 0.15);
-           } else {
-               return (int) (sum * 0.1);
-           }
-       }
-    }
-    public int getDiscountPremium() {
-        return discountPremium;
-    }
-
-    public void setDiscountPremium(int discountPremium) {
-        this.discountPremium = discountPremium;
-    }
-
+  }
 }
 // Base premium:
 // if client is under 25 years old = base premium is 15% of sum
