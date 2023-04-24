@@ -17,6 +17,12 @@ public class InsuranceSystem {
       System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("0", "s", "."));
       return;
     }
+    if (db.size() == 1) {
+      System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
+    } else {
+      System.out.println(
+          MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", db.size()), "s", ":"));
+    }
     for (int j = 0; j < db.size(); j++) {
 
       int discountedPremium1 = 0;
@@ -31,7 +37,6 @@ public class InsuranceSystem {
       // When database is called, checks database for number of profiles and outputs messages
       // depending on the number of profiles.
       if (loadedProfile != null) {
-        System.out.println(totalPremium);
         for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
           PolicyType policyType = loadedProfile.getPolicies().get(i).getType();
           if (policyType == PolicyType.HOME) {
@@ -172,29 +177,6 @@ public class InsuranceSystem {
         }
       }
 
-      for (int i = 0; i < db.size(); i++) {
-        if (db.size() == 1) {
-          System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage("1", "", ":"));
-          System.out.println(
-              " "
-                  + (1)
-                  + ":"
-                  + " "
-                  + db.get(0).getName()
-                  + ", "
-                  + db.get(0).getAge()
-                  + ", "
-                  + db.get(i).getPolicies().size()
-                  + " "
-                  + "policies for a total of $"
-                  + total2);
-          return;
-        }
-      }
-
-      System.out.println(
-          MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.format("%d", db.size()), "s", ":"));
-
       // for (int i = 0; i < db.size(); i++) { // prints out the profiles in the database
       if (loadedProfile == null) {
         if (db.get(j).getPolicyCount() == 1) {
@@ -302,6 +284,11 @@ public class InsuranceSystem {
             + userName.substring(1, userName.length()).toLowerCase();
     int numAge = Integer.parseInt(age); // new variable that converts string age to int age
 
+    if (loadedProfile != null) { // checks if a profile is loaded
+      MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(loadedProfile.getName());
+      return;
+    }
+
     if (userName.length() < 3) { // Checks if name is long enough
       System.out.println(MessageCli.INVALID_USERNAME_TOO_SHORT.getMessage(userName));
       return;
@@ -395,6 +382,7 @@ public class InsuranceSystem {
       MessageCli.NEW_POLICY_CREATED.printMessage("car", loadedProfile.getName());
     }
     if (type == PolicyType.LIFE) {
+
       // check arraylist if there is a life policy.
       // if there is, print message saying that the user already has a life policy
       // if there isn't, create a new life policy
@@ -402,16 +390,20 @@ public class InsuranceSystem {
         MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.printMessage(loadedProfile.getName());
         return;
       }
+      int hasLifePolicy = 0;
       for (int i = 0; i < loadedProfile.getPolicyCount(); i++) {
-        System.out.println(loadedProfile.getAge());
         if (loadedProfile.getPolicies().get(i).getType() == PolicyType.LIFE) {
-          MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(loadedProfile.getName());
+          hasLifePolicy = 1;
         } else {
-          Life lifePolicy = new Life(options[0]);
-          loadedProfile.addPolicy(lifePolicy);
-          MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
-          return;
+          hasLifePolicy = 0;
         }
+      }
+      if (hasLifePolicy == 0) {
+        Life lifePolicy = new Life(options[0]);
+        loadedProfile.addPolicy(lifePolicy);
+        MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getName());
+      } else {
+        MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(loadedProfile.getName());
       }
     }
   }
