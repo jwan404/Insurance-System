@@ -316,16 +316,16 @@ public class InsuranceSystem {
     userName =
         userName.substring(0, 1).toUpperCase()
             + userName.substring(1, userName.length()).toLowerCase();
-    boolean profileExists = false;
+    boolean isProfile = false;
     for (int i = 0; i < db.size(); i++) { // checks if name is in database
       if (userName.equals(db.get(i).getName())) {
         System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
         loadedProfile = db.get(i);
-        profileExists = true;
+        isProfile = true;
         return;
       }
     }
-    if (profileExists == false) {
+    if (isProfile == false) {
       System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
     }
     if (loadedProfile == null) {
